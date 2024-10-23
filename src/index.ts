@@ -31,7 +31,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(authenticateJWT);
 
 app.get("/", (req: Request, res: Response) => {
-  res.render("index", { title: "Hey", message: `Hello ${req.user?.email}` });
+  res.render("index",  { user: req.user, title: "Hey", message: `Hello ${req.user?.email}` });
 });
 
 app.use("/auth", authRouter);

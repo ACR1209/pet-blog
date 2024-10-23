@@ -4,8 +4,9 @@ html
     block scripts
     link(href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css", rel="stylesheet")
   body
-    nav
-      ul
+    nav.flex.justify-between.items-center.px-4.py-2.border-b
+      h1.text-2xl.font-bold Pet Blog
+      ul.flex.gap-3
         li
           a(href="/") Home
         if user
