@@ -6,8 +6,11 @@ dotenv.config();
 const app: Application = express();
 const port = process.env.PORT || 8000;
 
+app.set("view engine", "pug");
+app.set("views", __dirname + "/views");
+
 app.get("/", (req: Request, res: Response) => {
-  res.send("Welcome to Express & TypeScript Server!");
+  res.render("index", { title: "Hey", message: "Hello there!" });
 });
 
 app.listen(port, () => {
