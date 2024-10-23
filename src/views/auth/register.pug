@@ -1,0 +1,22 @@
+extends ../layout.pug
+
+block content
+    div.flex.flex-col.items-center.justify-center.min-h-screen.bg-gray-100
+        h1.text-center.text-4xl.font-bold.text-gray-800.my-8 Pet Blog
+        h2.text-center.text-2xl.font-semibold.text-gray-700.my-4
+            | Welcome to Pet Blog!
+            br
+            | Enter your data to create your account
+        if alert
+            div.text-red-500.text-center.my-1= alert
+        form(action="/auth/register", method="POST", class="w-full max-w-sm mx-auto")
+            div.my-4
+            label(for="email") Email
+            input#email(name="email", type="email", required, class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring")
+            div.my-4
+            label(for="password") Password
+            input#password(name="password", type="password", required, class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring")
+            div.my-4
+            button(type="submit", class="w-full px-4 py-2 mt-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600") Register
+            div.my-4
+            a(href="/auth/login", class="text-blue-500 hover:underline") Login
