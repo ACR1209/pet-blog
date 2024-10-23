@@ -1,6 +1,21 @@
 html
   head
     title Pet Blog
+    block scripts
     link(href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css", rel="stylesheet")
   body
+    nav
+      ul
+        li
+          a(href="/") Home
+        if user
+          li
+            a(href="/posts/new") New Post
+          li
+            a(href="/auth/logout") Logout 
+        else 
+          li
+            a(href="/auth/login") Login
+          li
+            a(href="/auth/register") Register
     block content

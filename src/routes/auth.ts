@@ -1,5 +1,6 @@
 import express from "express";
 import { loginUser, registerUser } from "../use-cases/user";
+import jwt from "jsonwebtoken";
 
 const authRouter = express.Router();
 
@@ -16,9 +17,20 @@ authRouter.post("/login", async (req, res) => {
 
   try {
     const user = await loginUser(email, password);
-    res.redirect(`/users/profile/${user.id}`);
+    const accessToken = jwt.sign(
+      JSON.stringify(user),
+      process.env.TOKEN_SECRET!,
+    );
+
+    res.cookie('authToken', accessToken, {
+      httpOnly: true,  
+      secure: true,  
+      maxAge: 60 * 60 * 1000 
+    });
+  
+    res.json({ accessToken, user: user });
   } catch (e: any) {
-    res.render("auth/login", { alert: e.message });
+    res.status(401).json({ error: e.message });
   }
 });
 

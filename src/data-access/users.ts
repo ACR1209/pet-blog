@@ -9,6 +9,10 @@ export async function getUser(user_id: string): Promise<PublicUser | null> {
   });
 }
 
+export async function getUserById(user_id: string): Promise<User | null> {
+  return await prisma.user.findUnique({ where: { id: user_id } });
+}
+
 export async function getUserByEmail(email: string): Promise<User | null> {
   return await prisma.user.findUnique({ where: { email } });
 }
