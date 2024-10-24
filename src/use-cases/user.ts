@@ -29,6 +29,7 @@ export async function registerUser(email: string, password: string) {
     encryptedPassword: hashedPassword,
     name: null,
     about: null,
+    lastName: null,
   });
 }
 

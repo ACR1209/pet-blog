@@ -10,9 +10,9 @@ block content
             h2.text-xl.font-semibold.text-gray-700.my-4 Email
             p= user.email
         div.my-4
-            h2.text-xl.font-semibold.text-gray-700.my-4 Name
-        if user.name
-            p= user.name
+            h2.text-xl.font-semibold.text-gray-700.my-4 Full Name
+        if user.name 
+            p= `${user.name} ${user.lastName ? user.lastName : ''}`
         else 
             p No name yet
         div.my-4

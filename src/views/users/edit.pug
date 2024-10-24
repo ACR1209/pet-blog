@@ -11,11 +11,16 @@ block content
         form(action=`/users/profile/${user.id}/edit?_method=PATCH` method="POST", class="w-full max-w-xl", id="editForm")
             div.flex.flex-col.gap-1
                 label(for="name") Name:
-                input(type="text" id="name" name="name", value: user.name)
+                input(type="text" id="name" name="name", value= user.name)
+
+            div.flex.flex-col.gap-1
+                label(for="lastName") Last Name:
+                input(type="text" id="lastName" name="lastName", value= user.lastName)
 
             div.flex.flex-col.gap-1
                 label(for="about") Bio:
-                textarea(id="about" name="about", value: user.about)
+                textarea(id="about" name="about")
+                    | #{user.about}
 
             div
                 button(type="submit") Save Changes

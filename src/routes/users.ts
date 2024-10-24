@@ -6,6 +6,7 @@ import {
   registerUser,
   updateUserInfo,
 } from "../use-cases/user";
+import { capitalizeLastNameInUsers, filterByNPrefixes, flattenUsers, orderUsersByName } from "../utils/users";
 
 const userRouter = express.Router();
 
@@ -45,7 +46,22 @@ userRouter.patch("/profile/:id/edit", async (req, res) => {
 
 userRouter.get("/", async (req, res) => {
   const users = await getAllUsers();
-  res.render("users/index", { users, currentUser: req.user });
+  const { filter } = req.query;
+
+  switch (filter) {
+    case "alphabetical":
+      const usersOrdered = capitalizeLastNameInUsers(orderUsersByName(users));
+      res.render("users/index", { users: usersOrdered, currentUser: req.user });
+      break;
+    case "withPrefix":
+      const usersFiltered = filterByNPrefixes(users, ["a", "b", "c"]);
+      res.render("users/index", { users: usersFiltered, currentUser: req.user });
+      break;
+    default:
+      res.render("users/index", { users, currentUser: req.user });
+      break;
+  }
+
 });
 
 userRouter.get("/user/:id", async (req, res) => {

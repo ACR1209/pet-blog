@@ -5,7 +5,7 @@ import { User } from "@prisma/client";
 export async function getUser(user_id: string): Promise<PublicUser | null> {
   return await prisma.user.findUnique({
     where: { id: user_id },
-    select: { id: true, name: true, email: true, about: true, createdAt: true },
+    select: { id: true, name: true, email: true, about: true, createdAt: true, lastName: true },
   });
 }
 
