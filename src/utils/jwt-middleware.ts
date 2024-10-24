@@ -10,7 +10,13 @@ export const authenticateJWT = async (req: Request, res: Response, next: Functio
       return next();          
     }
   
-    const payload = jwt.verify(token, process.env.TOKEN_SECRET!);
+    let payload;
+    try {
+        payload = jwt.verify(token, process.env.TOKEN_SECRET!);
+    } catch (error) {
+        req.user = undefined;
+        return next();
+    }
 
     if (!payload || typeof payload === "string") {
       req.user = undefined;
