@@ -1,0 +1,9 @@
+extends ../layout.pug
+
+block content
+  h1.text-3xl.font-bold Users
+  div(class = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5")
+    each user in users
+        a(href=`/users/profile/${user.id}`, class="w-full bg-white shadow-md p-4  rounded-lg flex flex-col gap-3 items-center") 
+            span.text-lg.font-bold.w-full.truncate= user.email 
+            span.text-sm.w-full.truncate= user.name ? user.name : 'No name'

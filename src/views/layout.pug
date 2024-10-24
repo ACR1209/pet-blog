@@ -9,11 +9,13 @@ html
       ul.flex.gap-3
         li
           a(href="/") Home
-        if user
+        if currentUser
+          li
+              a(href="/users") Users
           li
             a(href="/posts/new") New Post
           li 
-            a(href=`/users/profile/${user.id}`) Profile
+            a(href=`/users/profile/${currentUser.id}`) Profile
           li
             form(action="/auth/logout?_method=DELETE" method="POST", class="inline")
               button(type="submit") Logout

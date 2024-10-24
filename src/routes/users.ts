@@ -43,9 +43,9 @@ userRouter.patch("/profile/:id/edit", async (req, res) => {
 
 
 
-userRouter.get("/users", async (req, res) => {
+userRouter.get("/", async (req, res) => {
   const users = await getAllUsers();
-  res.json(users);
+  res.render("users/index", { users, currentUser: req.user });
 });
 
 userRouter.get("/user/:id", async (req, res) => {
