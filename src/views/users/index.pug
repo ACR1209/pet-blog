@@ -6,24 +6,23 @@ mixin user(user)
     span.text-sm.w-full.truncate= user.name ? `${user.name} ${user.lastName}` : 'No name'
 
 block content
-  p= users
-  //- h1.text-3xl.font-bold Users
-  //- form(action="/users" method="get" class="mb-5")
-  //-   div(class="flex gap-3 items-center my-5")
-  //-     label(for="filter" class="text-lg font-medium") Filter by:
-  //-     select(name="filter" id="filter" class="border rounded p-2")
-  //-       option(value="") Default order
-  //-       option(value="alphabetical") Order Alphabetically by name. Show last name in capital letters
-  //-       option(value="withPrefix") Show the users whose name start with "a", "b" and "c"
-  //-     button(type="submit" class="ml-3 bg-blue-500 text-white p-2 rounded") Apply
-  //- if Array.isArray(users)
-  //-   div(class = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 pb-10")
-  //-     each user in users
-  //-         +user(user)
-  //- else
-  //-   div.flex.flex-col.gap-5
-  //-     each prefix in Object.keys(users)
-  //-       h1.text-xl.font-semibold= `Users with names starting with "${prefix}" (${users[prefix].length})`
-  //-       div(class = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 pb-10")
-  //-         each user in users[prefix]
-  //-           +user(user)
+  h1.text-3xl.font-bold Users
+  form(action="/users" method="get" class="mb-5")
+    div(class="flex gap-3 items-center my-5")
+      label(for="filter" class="text-lg font-medium") Filter by:
+      select(name="filter" id="filter" class="border rounded p-2")
+        option(value="") Default order
+        option(value="alphabetical") Order Alphabetically by name. Show last name in capital letters
+        option(value="withPrefix") Show the users whose name start with "a", "b" and "c"
+      button(type="submit" class="ml-3 bg-blue-500 text-white p-2 rounded") Apply
+  if Array.isArray(users)
+    div(class = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 pb-10")
+      each user in users
+          +user(user)
+  else
+    div.flex.flex-col.gap-5
+      each prefix in Object.keys(users)
+        h1.text-xl.font-semibold= `Users with names starting with "${prefix}" (${users[prefix].length})`
+        div(class = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 pb-10")
+          each user in users[prefix]
+            +user(user)

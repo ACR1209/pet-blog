@@ -17,17 +17,112 @@ import {
 import { expect } from '@jest/globals';
 
 jest.mock("../src/use-cases/user");
-jest.mock("../src/utils/users");
 
 describe("User Routes", () => {
     const mockUsers = [
-        { id: "1", name: "John", lastName: "Doe", email: "john@example.com" },
-        { id: "2", name: "Jane", lastName: "Smith", email: "jane@example.com" },
+        {
+            id: "1",
+            name: "John",
+            lastName: "Doe",
+            email: "john.doe@example.com",
+            about: "A test user",
+            encryptedPassword: "hashedPassword",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+          {
+            id: "2",
+            name: "Jane",
+            lastName: "Doe",
+            email: "john.doe@example.com",
+            about: "A test user",
+            encryptedPassword: "hashedPassword",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+          {
+            id: "3",
+            name: "Arthur",
+            lastName: "Mark",
+            email: "ar.mark@example.com",
+            about: "A test user",
+            encryptedPassword: "hashedPassword",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+          {
+            id: "4",
+            name: "Bob",
+            lastName: "Young",
+            email: "bob@example.com",
+            about: "A test user",
+            encryptedPassword: "hashedPassword",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+          {
+            id: "5",
+            name: "Carlos",
+            lastName: "Aigster",
+            email: "carlosaig@example.com",
+            about: "A test user",
+            encryptedPassword: "hashedPassword",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
     ];
 
     const mockUsersOrdered = [
-        { id: "2", name: "Jane", lastName: "Smith", email: "jane@example.com" },
-        { id: "1", name: "John", lastName: "Doe", email: "john@example.com" },
+        {
+            id: "3",
+            name: "Arthur",
+            lastName: "Mark",
+            email: "ar.mark@example.com",
+            about: "A test user",
+            encryptedPassword: "hashedPassword",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
+        {
+            id: "4",
+            name: "Bob",
+            lastName: "Young",
+            email: "bob@example.com",
+            about: "A test user",
+            encryptedPassword: "hashedPassword",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
+        {
+            id: "5",
+            name: "Carlos",
+            lastName: "Aigster",
+            email: "carlosaig@example.com",
+            about: "A test user",
+            encryptedPassword: "hashedPassword",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        {
+          id: "2",
+          name: "Jane",
+          lastName: "Doe",
+          email: "john.doe@example.com",
+          about: "A test user",
+          encryptedPassword: "hashedPassword",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+            id: "1",
+            name: "John",
+            lastName: "Doe",
+            email: "john.doe@example.com",
+            about: "A test user",
+            encryptedPassword: "hashedPassword",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     ];
 
     const app = express();
@@ -43,56 +138,65 @@ describe("User Routes", () => {
     describe("GET /users with no filter", () => {
         it("should return all users", async () => {
             (getAllUsers as jest.Mock).mockResolvedValue(mockUsers);
-            //(getUsersWithFilter as jest.Mock).mockReturnValue(mockUsersOrdered);
-            //(orderUsersByName as jest.Mock).mockReturnValue(mockUsersOrdered);
-            //(capitalizeLastNameInUsers as jest.Mock).mockReturnValue(mockUsersOrdered);
 
             const response = await request(app).get("/users")
             
 
             expect(response.status).toBe(200);
             expect(response.text).toContain("John Doe");
+            expect(response.text).toContain("Jane Doe");
         });
     });
 
     describe("GET /users with alphabetical filter", () => {
         it("should return users ordered alphabetically by name with capitalized last names", async () => {
             (getAllUsers as jest.Mock).mockResolvedValue(mockUsers);
-            (getUsersWithFilter as jest.Mock).mockReturnValue(mockUsersOrdered);
-            (orderUsersByName as jest.Mock).mockReturnValue(mockUsersOrdered);
-            (capitalizeLastNameInUsers as jest.Mock).mockReturnValue(mockUsersOrdered);
 
             const response = await request(app).get("/users").query({ filter: "alphabetical" });
-
+            
             expect(response.status).toBe(200);
+            expect(response.text).toContain("Jane Doe");
             expect(response.text).toContain("John Doe");
-            expect(orderUsersByName).toHaveBeenCalled();
-            expect(capitalizeLastNameInUsers).toHaveBeenCalledWith(mockUsers);
         });
     });
 
     describe("GET /users with prefix filter", () => {
         it("should return users grouped by prefix", async () => {
             (getAllUsers as jest.Mock).mockResolvedValue(mockUsers);
-            (groupUsersByPrefix as jest.Mock).mockReturnValue(mockUsers);
 
             const response = await request(app).get("/users").query({ filter: "withPrefix" });
 
+            const expectedLetters = ["a", "b", "c"];
+            const expectedUsers = ["Arthur Mark", "Bob Young", "Carlos Aigster"];
+            const notExpectedUsers = ["Jane Doe", "John Doe"];
+
             expect(response.status).toBe(200);
-            expect(response.body.users).toEqual(mockUsers);
-            expect(groupUsersByPrefix).toHaveBeenCalledWith(mockUsers, ["a", "b", "c"]);
+
+            expectedLetters.forEach(letter => {
+                expect(response.text).toContain(letter);
+            });
+
+            expectedUsers.forEach(user => {
+                expect(response.text).toContain(user);
+            });
+
+            notExpectedUsers.forEach(user => {
+                expect(response.text).not.toContain(user);
+            });
         });
     });
 
     describe("GET /users/profile/:id", () => {
         it("should return user profile", async () => {
-            const mockUser = { id: "1", name: "John", lastName: "Doe", email: "john@example.com" };
+            const mockUser = { id: "1", name: "John", lastName: "Doe", email: "john@example.com", about: "A test user" };
             (getUserPublicInfo as jest.Mock).mockResolvedValue(mockUser);
 
             const response = await request(app).get("/users/profile/1");
 
             expect(response.status).toBe(200);
-            expect(response.body.user).toEqual(mockUser);
+            expect(response.text).toContain("John Doe");
+            expect(response.text).toContain("john@example.com");
+            expect(response.text).toContain("A test user");
             expect(getUserPublicInfo).toHaveBeenCalledWith("1");
         });
 

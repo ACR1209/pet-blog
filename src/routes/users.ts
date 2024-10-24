@@ -6,7 +6,7 @@ import {
   registerUser,
   updateUserInfo,
 } from "../use-cases/user";
-import { capitalizeLastNameInUsers, groupUsersByPrefix, flattenUsers, orderUsersByName, getUsersWithFilter } from "../utils/users";
+import { getUsersWithFilter } from "../utils/users";
 import { CreateUser } from "../types/users";
 
 const userRouter = express.Router();
@@ -49,7 +49,7 @@ userRouter.get("/", async (req, res) => {
   const users = await getAllUsers();
   const { filter } = req.query;
 
-  const usersDisplayed = getUsersWithFilter(users, undefined);
+  const usersDisplayed = getUsersWithFilter(users, filter as string);
 
   res.render("users/index", { users: usersDisplayed, currentUser: req.user });
 });

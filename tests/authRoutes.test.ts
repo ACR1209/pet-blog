@@ -73,6 +73,7 @@ describe("Auth Routes", () => {
 
       expect(response.status).toBe(302);
       expect(response.headers['set-cookie'][0]).toContain("authToken=mockAccessToken");
+      expect(loginUser).toHaveBeenCalled();
     });
 
     it("should return error message on failed login", async () => {

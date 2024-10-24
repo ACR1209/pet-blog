@@ -58,7 +58,7 @@ authRouter.post("/register", async (req, res) => {
     
     res.redirect(`/`);
   } catch (e: any) {
-    console.error(e);
+    console.error(e.message);
     res.render("auth/register", { alert: e.message });
   }
 });
