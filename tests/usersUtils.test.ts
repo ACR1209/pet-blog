@@ -1,4 +1,4 @@
-import { capitalizeLastName, capitalizeLastNameInUsers, groupUsersByPrefix, filterUsersByPrefix, orderUsersByName, userFullName, flattenUsers } from '../src/utils/users';
+import { capitalizeLastName, capitalizeLastNameInUsers, groupUsersByPrefix, filterUsersByPrefix, orderUsersByName, userFullName, flattenUsers, getUsersWithFilter } from '../src/utils/users';
 import { User } from '@prisma/client';
 import { expect } from '@jest/globals';
 
@@ -118,6 +118,42 @@ describe('User Utils', () => {
     });
   });
 
+
+  describe('#getUsersWithFilter', ()=>{
+    const users: User[] = [ 
+      { id: "test", name: 'John', lastName: 'Doe', about: "", createdAt: new Date(), email: "", encryptedPassword: "", updatedAt: new Date() },
+      { id: "test", name: 'Alice', lastName: 'smith', about: "", createdAt: new Date(), email: "", encryptedPassword: "", updatedAt: new Date() },
+      { id: "test", name: 'Carlos', lastName: 'Martinez', about: "", createdAt: new Date(), email: "", encryptedPassword: "", updatedAt: new Date() },
+      { id: "test", name: 'Bob', lastName: 'Smith', about: "", createdAt: new Date(), email: "", encryptedPassword: "", updatedAt: new Date() }
+    ];
+
+    it('should return all users if no filter is provided', ()=>{
+      const res = getUsersWithFilter(users, undefined);
+    
+      expect(res).toEqual(users);
+    });
+
+    it('should return all users ordered alphabetically by name with capitalized last names', ()=>{
+      const res = getUsersWithFilter(users, 'alphabetical');
+
+      const names = ['Alice', 'Bob', 'Carlos', 'John'];
+      
+      if(!Array.isArray(res)) throw new Error('Expected array');
+
+      expect(Array.isArray(res)).toBe(true);
+      expect(names).toEqual(res.map(user => user.name));
+    });
+
+    it('should return all users grouped by prefix', ()=>{
+      const res = getUsersWithFilter(users, 'withPrefix');
+
+      const prefixes = ['a', 'b', 'c'];
+
+      if(Array.isArray(res)) throw new Error('Expected record');
+
+      expect(Object.keys(res).sort((a, b)=> a.localeCompare(b))).toEqual(prefixes);
+    });
+  })
 
   describe('#orderUsersByName', () => {
     const users: User[] = [ 

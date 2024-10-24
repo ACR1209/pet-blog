@@ -6,7 +6,7 @@ import {
   registerUser,
   updateUserInfo,
 } from "../use-cases/user";
-import { capitalizeLastNameInUsers, groupUsersByPrefix, flattenUsers, orderUsersByName } from "../utils/users";
+import { capitalizeLastNameInUsers, groupUsersByPrefix, flattenUsers, orderUsersByName, getUsersWithFilter } from "../utils/users";
 import { CreateUser } from "../types/users";
 
 const userRouter = express.Router();
@@ -49,20 +49,9 @@ userRouter.get("/", async (req, res) => {
   const users = await getAllUsers();
   const { filter } = req.query;
 
-  switch (filter) {
-    case "alphabetical":
-      const usersOrdered = capitalizeLastNameInUsers(orderUsersByName(users));
-      res.render("users/index", { users: usersOrdered, currentUser: req.user });
-      break;
-    case "withPrefix":
-      const usersFiltered = groupUsersByPrefix(users, ["a", "b", "c"]);
-      res.render("users/index", { users: usersFiltered, currentUser: req.user });
-      break;
-    default:
-      res.render("users/index", { users, currentUser: req.user });
-      break;
-  }
+  const usersDisplayed = getUsersWithFilter(users, undefined);
 
+  res.render("users/index", { users: usersDisplayed, currentUser: req.user });
 });
 
 userRouter.get("/user/:id", async (req, res) => {
