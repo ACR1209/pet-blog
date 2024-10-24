@@ -1,4 +1,4 @@
 import { User } from "@prisma/client";
 
-export type CreateUser = Omit<User, "id" | "createdAt" | "updatedAt">;
+export type CreateUser = { password: string  } & Omit<User, "id" | "createdAt" | "updatedAt" | "encryptedPassword">;
 export type PublicUser = Omit<User, "encryptedPassword" | "updatedAt">;

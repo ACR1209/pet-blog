@@ -7,6 +7,7 @@ import {
   updateUserInfo,
 } from "../use-cases/user";
 import { capitalizeLastNameInUsers, filterByNPrefixes, flattenUsers, orderUsersByName } from "../utils/users";
+import { CreateUser } from "../types/users";
 
 const userRouter = express.Router();
 
@@ -71,10 +72,10 @@ userRouter.get("/user/:id", async (req, res) => {
 });
 
 userRouter.post("/user", async (req, res) => {
-  const { email, password }: { email: string; password: string } = req.body;
+  const user: CreateUser = req.body;
 
   try {
-    const addedUser = await registerUser(email, password);
+    const addedUser = await registerUser(user);
     res.status(201).json(addedUser);
   } catch (e: any) {
     res.status(400).json({ error: e.message });

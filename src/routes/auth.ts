@@ -1,6 +1,7 @@
 import express from "express";
 import { loginUser, registerUser } from "../use-cases/user";
 import jwt from "jsonwebtoken";
+import { CreateUser } from "../types/users";
 
 const authRouter = express.Router();
 
@@ -39,12 +40,25 @@ authRouter.post("/login", async (req, res) => {
 });
 
 authRouter.post("/register", async (req, res) => {
-  const { email, password }: { email: string; password: string } = req.body;
+  const userData: CreateUser = req.body;
 
   try {
-    const addedUser = await registerUser(email, password);
+    const addedUser = await registerUser(userData);
+
+    const accessToken = jwt.sign(
+      JSON.stringify(addedUser),
+      process.env.TOKEN_SECRET!,
+    );
+
+    res.cookie('authToken', accessToken, {
+      httpOnly: true,  
+      secure: true,  
+      maxAge: 60 * 60 * 1000 
+    });
+    
     res.redirect(`/users/profile/${addedUser.id}`);
   } catch (e: any) {
+    console.error(e);
     res.render("auth/register", { alert: e.message });
   }
 });

@@ -22,7 +22,7 @@ export async function getUsers() {
 }
 
 export async function createUser(user: CreateUser) {
-  return await prisma.user.create({ data: user });
+  return await prisma.user.create({ data: { name: user.name, lastName: user.lastName, email: user.email, about: user.about , encryptedPassword: user.password } });
 }
 
 export async function updateUser(user_id: string, user: Partial<User>) {

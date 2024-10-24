@@ -11,25 +11,25 @@ import { comparePassword, hashPassword } from "../utils/passwords";
 import { CreateUser } from "../types/users";
 import { validateEmail } from "../utils/email";
 
-export async function registerUser(email: string, password: string) {
-  if (!validateEmail(email)) {
+export async function registerUser(user: CreateUser) {
+  if (!validateEmail(user.email)) {
     throw new Error("Invalid email");
   }
 
-  const existingUser = await getUserByEmail(email);
+  const existingUser = await getUserByEmail(user.email);
 
   if (existingUser) {
     throw new Error("User with that email already exists");
   }
 
-  const hashedPassword = await hashPassword(password);
+  const hashedPassword = await hashPassword(user.password);
 
   return createUser({
-    email,
-    encryptedPassword: hashedPassword,
-    name: null,
-    about: null,
-    lastName: null,
+    email: user.email,
+    password: hashedPassword,
+    name: user.name,
+    lastName: user.lastName,
+    about: user.about,
   });
 }
 
@@ -75,4 +75,16 @@ export async function deleteUserCase(user_id: string) {
 
 export async function getAllUsers() {
   return getUsers();
+}
+
+export async function addUser(user: CreateUser) {
+  const registeredUser = await registerUser(user);
+
+  const updatedUser = await updateUserInfo(registeredUser.id, { 
+    name: user.name,
+    lastName: user.lastName,
+    about: user.about,
+  });
+
+  return updatedUser;
 }

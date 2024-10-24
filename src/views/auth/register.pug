@@ -11,12 +11,18 @@ block content
             div.text-red-500.text-center.my-1= alert
         form(action="/auth/register", method="POST", class="w-full max-w-sm mx-auto")
             div.my-4
-            label(for="email") Email
-            input#email(name="email", type="email", required, class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring")
+                label(for="name") First Name
+                input#email(name="name", type="text", required, class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring")
             div.my-4
-            label(for="password") Password
-            input#password(name="password", type="password", required, class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring")
+                label(for="lastName") Last Name
+                input#email(name="lastName", type="text", required, class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring")
             div.my-4
-            button(type="submit", class="w-full px-4 py-2 mt-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600") Register
+                label(for="email") Email
+                input#email(name="email", type="email", required, class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring")
             div.my-4
-            a(href="/auth/login", class="text-blue-500 hover:underline") Login
+                label(for="password") Password
+                input#password(name="password", type="password", required, class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring")
+            div.my-4
+                button(type="submit", class="w-full px-4 py-2 mt-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600") Register
+            div.my-4
+             a(href="/auth/login", class="text-blue-500 hover:underline") Login
