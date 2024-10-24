@@ -12,6 +12,11 @@ authRouter.get("/register", (req, res) => {
   res.render("auth/register");
 });
 
+authRouter.delete('/logout', (req, res) => {
+  res.clearCookie('authToken'); 
+  res.redirect('/'); 
+});
+
 authRouter.post("/login", async (req, res) => {
   const { email, password }: { email: string; password: string } = req.body;
 
