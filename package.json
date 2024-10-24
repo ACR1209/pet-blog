@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "coverage": "jest --coverage",
     "dev": "tsx watch ./src/index.ts",
     "db:reset": "npx prisma db push --force-reset && npx prisma db seed"
   },
