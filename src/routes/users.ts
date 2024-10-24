@@ -6,7 +6,7 @@ import {
   registerUser,
   updateUserInfo,
 } from "../use-cases/user";
-import { capitalizeLastNameInUsers, filterByNPrefixes, flattenUsers, orderUsersByName } from "../utils/users";
+import { capitalizeLastNameInUsers, groupUsersByPrefix, flattenUsers, orderUsersByName } from "../utils/users";
 import { CreateUser } from "../types/users";
 
 const userRouter = express.Router();
@@ -55,7 +55,7 @@ userRouter.get("/", async (req, res) => {
       res.render("users/index", { users: usersOrdered, currentUser: req.user });
       break;
     case "withPrefix":
-      const usersFiltered = filterByNPrefixes(users, ["a", "b", "c"]);
+      const usersFiltered = groupUsersByPrefix(users, ["a", "b", "c"]);
       res.render("users/index", { users: usersFiltered, currentUser: req.user });
       break;
     default:

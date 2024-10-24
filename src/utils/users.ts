@@ -1,7 +1,7 @@
 import { User } from "@prisma/client";
 
 export function userFullName(user: User): string {
-    return `${user.name || ""} ${user.lastName || ""}`;
+    return `${user.name || ""} ${user.lastName || ""}`.trim();
 }
 
 export function orderUsersByName(users: User[]): User[] {
@@ -28,7 +28,7 @@ export function filterUsersByPrefix(users: User[], prefix: string): User[] {
   return users.filter((user) => userFullName(user).toLowerCase().startsWith(prefix.toLowerCase()));
 }
 
-export function filterByNPrefixes(users: User[], prefixes: string[]): Record<string, User[]> {
+export function groupUsersByPrefix(users: User[], prefixes: string[]): Record<string, User[]> {
   return users.reduce((acc, user) => {
     const prefixOfUser = prefixes.find((prefix) => userFullName(user).toLowerCase().startsWith(prefix.toLowerCase()));  
     if (prefixOfUser) {
