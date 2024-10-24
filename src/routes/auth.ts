@@ -27,10 +27,9 @@ authRouter.post("/login", async (req, res) => {
       secure: true,  
       maxAge: 60 * 60 * 1000 
     });
-  
-    res.json({ accessToken, user: user });
+    res.redirect(`/`);
   } catch (e: any) {
-    res.status(401).json({ error: e.message });
+    res.render("auth/login", { alert: e.message });
   }
 });
 

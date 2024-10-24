@@ -6,6 +6,8 @@ import userRouter from "./routes/users";
 import { User } from "@prisma/client";
 import { authenticateJWT } from "./utils/jwt-middleware";
 import cookieParser from "cookie-parser";
+import methodOverride from "method-override";
+
 dotenv.config();
 
 declare global {
@@ -21,8 +23,10 @@ dotenv.config();
 const app: Application = express();
 const port = process.env.PORT || 8000;
 
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(methodOverride('_method'));
+
 
 app.set("view engine", "pug");
 app.set("views", __dirname + "/views");

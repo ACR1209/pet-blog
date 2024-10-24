@@ -11,8 +11,37 @@ const userRouter = express.Router();
 
 userRouter.get("/profile/:id", async (req, res) => {
   const user = await getUserPublicInfo(req.params.id);
-  res.render("users/profile", { user });
+  if (!user) {
+    res.status(404).send("User not found");
+    return
+  }
+
+  res.render("users/profile", { user, currentUser: req.user });
 });
+
+userRouter.get("/profile/:id/edit", async (req, res) => {
+  if (!req.user  || req.user.id !== req.params.id) {
+    res.status(401).send("Unauthorized");
+    return;
+  }
+  
+  const user = await getUserPublicInfo(req.params.id);
+  res.render("users/edit", { user, currentUser: req.user });
+});
+
+
+userRouter.patch("/profile/:id/edit", async (req, res) => {
+  if (!req.user  || req.user.id !== req.params.id) {
+    res.status(401).send("Unauthorized");
+    return;
+  }
+
+  await updateUserInfo(req.params.id, req.body);
+  
+  res.redirect(`/users/profile/${req.params.id}`);
+});
+
+
 
 userRouter.get("/users", async (req, res) => {
   const users = await getAllUsers();

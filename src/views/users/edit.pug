@@ -1,0 +1,21 @@
+extends ../layout.pug
+
+block scripts
+    script(src="/js/intersectSubmit.js")
+
+block content
+    div.flex.flex-col.items-center.justify-center.min-h-screen
+        h1.font-bold.text-4xl Edit Profile
+        p.text-gray-500.my-4 Edit your profile information below.
+
+        form(action=`/users/profile/${user.id}/edit?_method=PATCH` method="POST", class="w-full max-w-xl", id="editForm")
+            div.flex.flex-col.gap-1
+                label(for="name") Name:
+                input(type="text" id="name" name="name", value: user.name)
+
+            div.flex.flex-col.gap-1
+                label(for="about") Bio:
+                textarea(id="about" name="about", value: user.about)
+
+            div
+                button(type="submit") Save Changes

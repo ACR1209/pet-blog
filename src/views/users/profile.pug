@@ -1,4 +1,23 @@
 extends ../layout.pug
 
 block content
-    h1= user.email
+    div(class= "w-1/2 mx-auto py-8")
+        div.flex.gap-4.items-center
+            h1.text-2xl.font-bold.text-center User Profile
+            if user && currentUser && user.id === currentUser.id
+                a(href=`/users/profile/${user.id}/edit`, class="text-blue-500 hover:underline") Edit Profile
+        div.my-4
+            h2.text-xl.font-semibold.text-gray-700.my-4 Email
+            p= user.email
+        div.my-4
+            h2.text-xl.font-semibold.text-gray-700.my-4 Name
+        if user.name
+            p= user.name
+        else 
+            p No name yet
+        div.my-4
+            h2.text-xl.font-semibold.text-gray-700.my-4 Bio
+        if user.about
+            p= user.about
+        else
+            p No bio yet

@@ -12,6 +12,8 @@ html
         if user
           li
             a(href="/posts/new") New Post
+          li 
+            a(href=`/users/profile/${user.id}`) Profile
           li
             a(href="/auth/logout") Logout 
         else 
@@ -19,4 +21,5 @@ html
             a(href="/auth/login") Login
           li
             a(href="/auth/register") Register
-    block content
+    div.w-full.h-full.bg-gray-100
+      block content

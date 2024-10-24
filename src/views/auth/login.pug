@@ -1,14 +1,13 @@
 extends ../layout.pug
 
-block scripts
-    script(src="/js/login.js")
 
 block content
     div.flex.flex-col.items-center.justify-center.min-h-screen.bg-gray-100
         h1.text-center.text-4xl.font-bold.text-gray-800.my-8 Pet Blog
         h2.text-center.text-2xl.font-semibold.text-gray-700.my-4 Welcome back! Login to your account
-        div#alert.hidden.text-red-500.text-center.my-1
-        form(class="w-full max-w-sm mx-auto", id="login-form")
+        if alert
+            div#alert.text-red-500.text-center.my-1= alert
+        form(action="/auth/login" method="POST" class="w-full max-w-sm mx-auto", id="login-form")
             div.my-4
             label(for="email") Email
             input#email(name="email", type="email", required, class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring")
