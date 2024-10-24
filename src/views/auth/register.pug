@@ -8,21 +8,21 @@ block content
             br
             | Enter your data to create your account
         if alert
-            div.text-red-500.text-center.my-1= alert
+            div.text-red-500.text-center.my-1(data-cy="error-message")= alert
         form(action="/auth/register", method="POST", class="w-full max-w-sm mx-auto")
             div.my-4
                 label(for="name") First Name
-                input#email(name="name", type="text", required, class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring")
+                input#email(name="name", data-cy="name", type="text", required, class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring")
             div.my-4
                 label(for="lastName") Last Name
-                input#email(name="lastName", type="text", required, class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring")
+                input#email(name="lastName", data-cy="lastName", type="text", required, class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring")
             div.my-4
                 label(for="email") Email
-                input#email(name="email", type="email", required, class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring")
+                input#email(name="email", data-cy="email", type="email", required, class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring")
             div.my-4
                 label(for="password") Password
-                input#password(name="password", type="password", required, class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring")
+                input#password(name="password", data-cy="password", type="password", required, class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring")
             div.my-4
-                button(type="submit", class="w-full px-4 py-2 mt-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600") Register
+                button(type="submit", data-cy="register-button" class="w-full px-4 py-2 mt-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600") Register
             div.my-4
-             a(href="/auth/login", class="text-blue-500 hover:underline") Login
+             a(href="/auth/login", class="text-blue-500 hover:underline", data-cy="login-link") Login

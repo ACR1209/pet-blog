@@ -56,7 +56,7 @@ authRouter.post("/register", async (req, res) => {
       maxAge: 60 * 60 * 1000 
     });
     
-    res.redirect(`/users/profile/${addedUser.id}`);
+    res.redirect(`/`);
   } catch (e: any) {
     console.error(e);
     res.render("auth/register", { alert: e.message });
