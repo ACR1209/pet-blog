@@ -32,6 +32,36 @@ describe("Auth Routes", () => {
     app.use("/auth", authRouter);
   });
 
+  describe("GET /auth/login", () => {
+    it("should render login page", async () => {
+      const response = await request(app).get("/auth/login");
+
+      expect(response.status).toBe(200);
+      expect(response.text).toContain("Login");
+    });
+  });
+
+  describe("GET /auth/register", () => {
+    it("should render register page", async () => {
+      const response = await request(app).get("/auth/register");
+
+      expect(response.status).toBe(200);
+      expect(response.text).toContain("Register");
+    });
+  });
+
+  describe("DELETE /auth/logout", () => {
+    it("should clear cookie and redirect to home page", async () => {
+        const response = await request(app)
+          .delete("/auth/logout")
+          .set("Cookie", "authToken=mockAccessToken");
+
+        expect(response.status).toBe(302);
+        expect(response.headers.location).toBe("/");
+        expect(response.headers['set-cookie'][0]).toContain("authToken=;"); 
+    });
+  });
+
   describe("POST /auth/login", () => {
     it("should return accessToken on successful login", async () => {
       (loginUser as jest.Mock).mockResolvedValue(mockUser);
