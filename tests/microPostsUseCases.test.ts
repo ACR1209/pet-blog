@@ -129,7 +129,7 @@ describe("MicroPosts Use Cases", () => {
                 .rejects
                 .toThrow("404: User not authorized to delete this microPost");
 
-            expect(userHasAccessToMicroPost).toHaveBeenCalledWith("user1", "1");
+            expect(userHasAccessToMicroPost).toHaveBeenCalledWith("1", "user1");
             expect(deleteMicroPost).not.toHaveBeenCalled();
         });
     });
