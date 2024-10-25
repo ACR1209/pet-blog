@@ -1,0 +1,12 @@
+extends ../layout.pug
+
+block content 
+    h1.text-4xl.font-bold= post.title
+    div 
+        p 
+            | Written by 
+            a(href=`/users/profile/${post.author.id}`, class="font-bold underline")= `${post.author.name} ${post.author.lastName}`
+            |  on #{post.createdAt.toLocaleDateString()}
+
+    p.mt-5= post.content
+    
