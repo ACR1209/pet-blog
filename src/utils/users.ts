@@ -43,11 +43,3 @@ export function flattenUsers(users: Record<string, User[]>): User[] {
   return Object.values(users).flat();
 }
 
-export function getUsersWithFilter(users: User[], appliedFilter?: string): User[] | Record<string, User[]> {
-  const filters: Record<string, (users: User[])=>User[] | Record<string, User[]>> = {
-    "alphabetical": (users: User[])=> capitalizeLastNameInUsers(orderUsersByName(users)),
-    "withPrefix": (users: User[]) => groupUsersByPrefix(users, ["a", "b", "c"]),
-  }
-
-  return appliedFilter ? filters[appliedFilter](users) : users;
-}

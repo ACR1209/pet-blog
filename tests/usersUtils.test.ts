@@ -1,6 +1,7 @@
-import { capitalizeLastName, capitalizeLastNameInUsers, groupUsersByPrefix, filterUsersByPrefix, orderUsersByName, userFullName, flattenUsers, getUsersWithFilter } from '../src/utils/users';
+import { capitalizeLastName, capitalizeLastNameInUsers, groupUsersByPrefix, filterUsersByPrefix, orderUsersByName, userFullName, flattenUsers } from '../src/utils/users';
 import { User } from '@prisma/client';
 import { expect } from '@jest/globals';
+import { getUsersWithFilter } from '../src/utils/render';
 
 
 describe('User Utils', () => {

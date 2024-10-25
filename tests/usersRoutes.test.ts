@@ -8,15 +8,11 @@ import {
     updateUserInfo,
     deleteUserCase,
 } from "../src/use-cases/user";
-import {
-    capitalizeLastNameInUsers,
-    getUsersWithFilter,
-    groupUsersByPrefix,
-    orderUsersByName,
-} from "../src/utils/users";
 import { expect } from '@jest/globals';
+import { capitalizeLastNameInUsers, groupUsersByPrefix, orderUsersByName } from "../src/utils/users";
 
 jest.mock("../src/use-cases/user");
+jest.mock("../src/utils/users");
 
 describe("User Routes", () => {
     const mockUsers = [
@@ -126,13 +122,14 @@ describe("User Routes", () => {
     ];
 
     const app = express();
+    app.use(express.json());
+    app.set("view engine", "pug");
+    app.set("views", __dirname.replace("tests", "src") + "/views");
+    app.use("/users", userRouter);
     
     beforeEach(() => {
         jest.clearAllMocks();
-        app.use(express.json());
-        app.set("view engine", "pug");
-        app.set("views", __dirname.replace("tests", "src") + "/views");
-        app.use("/users", userRouter);
+        
     });
 
     describe("GET /users with no filter", () => {
@@ -151,18 +148,28 @@ describe("User Routes", () => {
     describe("GET /users with alphabetical filter", () => {
         it("should return users ordered alphabetically by name with capitalized last names", async () => {
             (getAllUsers as jest.Mock).mockResolvedValue(mockUsers);
+            (orderUsersByName as jest.Mock).mockReturnValue(mockUsersOrdered);
+            (capitalizeLastNameInUsers as jest.Mock).mockReturnValue(mockUsersOrdered);
+
 
             const response = await request(app).get("/users").query({ filter: "alphabetical" });
-            
+
+
+            const expectedNames = ["Arthur Mark", "Bob Young", "Carlos Aigster", "Jane Doe", "John Doe"];
             expect(response.status).toBe(200);
-            expect(response.text).toContain("Jane Doe");
-            expect(response.text).toContain("John Doe");
+            expectedNames.forEach(name => {
+                expect(response.text).toContain(name);
+            });
+
+            expect(orderUsersByName).toHaveBeenCalledWith(mockUsers);
+            expect(capitalizeLastNameInUsers).toHaveBeenCalledWith(mockUsersOrdered);
         });
     });
 
     describe("GET /users with prefix filter", () => {
         it("should return users grouped by prefix", async () => {
             (getAllUsers as jest.Mock).mockResolvedValue(mockUsers);
+            (groupUsersByPrefix as jest.Mock).mockReturnValue({ a: [mockUsers[2]], b: [mockUsers[3]], c: [mockUsers[4]] });
 
             const response = await request(app).get("/users").query({ filter: "withPrefix" });
 
@@ -183,6 +190,8 @@ describe("User Routes", () => {
             notExpectedUsers.forEach(user => {
                 expect(response.text).not.toContain(user);
             });
+
+            expect(groupUsersByPrefix).toHaveBeenCalledWith(mockUsers, ["a", "b", "c"]);
         });
     });
 

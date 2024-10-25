@@ -6,8 +6,8 @@ import {
   registerUser,
   updateUserInfo,
 } from "../use-cases/user";
-import { getUsersWithFilter } from "../utils/users";
 import { CreateUser } from "../types/users";
+import { getUsersWithFilter } from "../utils/render";
 
 const userRouter = express.Router();
 
