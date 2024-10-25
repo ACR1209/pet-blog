@@ -23,8 +23,8 @@ export async function createMicroPostUseCase(microPost: CreateMicropost){
     return await createMicroPost(microPost);
 }
 
-export async function updateMicroPostUseCase(userId: string, microPostId: string, microPost: Partial<CreateMicropost>){
-    if(!await userHasAccessToMicroPost(userId, microPostId)){
+export async function updateMicroPostUseCase( microPostId: string, microPost: Partial<CreateMicropost>, userId?: string){
+    if(!await userHasAccessToMicroPost(microPostId, userId)){
         throw new Error("404: User not authorized to update this microPost");
     }
 
@@ -32,7 +32,7 @@ export async function updateMicroPostUseCase(userId: string, microPostId: string
 }
 
 export async function deleteMicroPostUseCase(userId: string, microPostId: string){
-    if(!await userHasAccessToMicroPost(userId, microPostId)){
+    if(!await userHasAccessToMicroPost( microPostId, userId)){
         throw new Error("404: User not authorized to delete this microPost");
     }
 

@@ -7,9 +7,11 @@ mixin post(post)
         p.line-clamp-2= post.content
 
 block content
-  h1.text-4xl.font-bold Micro Posts
+  div.flex.flex-row.items-center.justify-between.mb-5
+    h1.text-4xl.font-bold Micro Posts
+    a(href='/posts/new', class="bg-blue-500 px-5 py-1 rounded-lg text-white hover:bg-blue-700") New Post
   div(class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4')
     each post in pageData.data
         +post(post)
   +pagination(pageData.page, pageData.totalPages, pageData.nextPage, pageData.prevPage)  
-  a(href='/posts/new') New Post
+  

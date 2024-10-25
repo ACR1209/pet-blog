@@ -37,12 +37,12 @@ microPostRouter.get("/new", (req, res) => {
 
 microPostRouter.post("/new", async (req, res) => {
     if (!req.user) {
-        res.status(401).send("Unauthorized to create a micro post without being logged in");
+        res.redirect("/auth/login");
         return;
     }
 
     const { title, content } = req.body;
-    const authorId = req.user.id;
+    const authorId = req.user?.id;
 
     const microPost = await createMicroPostUseCase({ title, content, authorId });
 
@@ -58,7 +58,7 @@ microPostRouter.get("/:id/edit", async (req, res) => {
         return;
     }
 
-    if (!req.user || !(await userHasAccessToMicroPost(req.user.id, id))) {
+    if (!(await userHasAccessToMicroPost( id, req.user?.id))) {
         res.status(401).send("Unauthorized to edit this micro post");
         return;
     }
@@ -75,14 +75,14 @@ microPostRouter.patch("/:id/edit", async (req, res) => {
         return;
     }
 
-    if (!req.user || !(await userHasAccessToMicroPost(req.user.id, id))) {
+    if (!(await userHasAccessToMicroPost( id, req.user?.id))) {
         res.status(401).send("Unauthorized to edit this micro post");
         return;
     }
 
     const { title, content } = req.body;
 
-    await updateMicroPostUseCase(req.user.id, id, { title, content });
+    await updateMicroPostUseCase( id, { title, content }, req.user?.id);
 
     res.redirect(`/posts/post/${id}`);
 })
@@ -96,12 +96,12 @@ microPostRouter.delete("/:id/delete", async (req, res) => {
         return;
     }
 
-    if (!req.user || !(await userHasAccessToMicroPost(req.user.id, id))) {
+    if (!(await userHasAccessToMicroPost(id, req.user?.id ))) {
         res.status(401).send("Unauthorized to delete this micro post");
         return;
     }
 
-    await deleteMicroPostUseCase(req.user.id, id);
+    await deleteMicroPostUseCase(req.user?.id!, id);
 
     res.redirect("/posts");
 })
