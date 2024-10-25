@@ -1,0 +1,13 @@
+extends ../layout.pug
+
+block content
+    h1.text-4xl.font-bold New Micro Post
+    form(action='/posts/new', method='POST')
+        div.mt-5
+            label(for='title') Title
+            input(type='text', name='title', id='title', class='w-full p-2 border border-gray-300 rounded-lg', required)
+        div.mt-5
+            label(for='content') Content
+            textarea(name='content', id='content', class='w-full p-2 border border-gray-300 rounded-lg', required)
+        div.mt-5
+            button(type='submit', class='bg-blue-500 text-white p-2 rounded-lg') Create Post

@@ -2,10 +2,9 @@ extends ../layout.pug
 include ../shared/pagination
 
 mixin post(post)
-    a(href=`/posts/${post.id}`, class="p-3 flex flex-col bg-white shadow-lg rounded-lg overflow-hidden")
+    a(href=`/posts/post/${post.id}`, class="p-3 flex flex-col bg-white shadow-lg rounded-lg overflow-hidden")
         h2.w-full.truncate.line-clamp-1.text-xl.font-semibold= post.title
         p.line-clamp-2= post.content
-
 
 block content
   h1.text-4xl.font-bold Micro Posts
@@ -13,4 +12,4 @@ block content
     each post in pageData.data
         +post(post)
   +pagination(pageData.page, pageData.totalPages, pageData.nextPage, pageData.prevPage)  
-  a(href='/microPosts/new') New Post
+  a(href='/posts/new') New Post
