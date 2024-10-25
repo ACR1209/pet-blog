@@ -6,7 +6,7 @@ block content
         if currentUser && currentUser.id === post.author.id
             div.flex.flex-row.gap-2
                 a(href=`/posts/${post.id}/edit`, class="text-blue-500") Edit
-                form(action=`/posts/${post.id}/delete`, method="POST", class="inline-block")
+                form(action=`/posts/${post.id}/delete?_method=DELETE`, method="POST", class="inline-block")
                     button(type="submit", class="text-red-500") Delete
     div 
         p 

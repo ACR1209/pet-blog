@@ -1,5 +1,5 @@
 import express from "express";
-import { createMicroPostUseCase, getMicroPostsPaginated, getMicroPostsUseCase, getMicroPostUseCase, updateMicroPostUseCase } from "../use-cases/microPosts";
+import { createMicroPostUseCase, deleteMicroPostUseCase, getMicroPostsPaginated, getMicroPostsUseCase, getMicroPostUseCase, updateMicroPostUseCase } from "../use-cases/microPosts";
 import { userHasAccessToMicroPost } from "../utils/microPosts";
 
 const microPostRouter = express.Router();
@@ -87,6 +87,24 @@ microPostRouter.patch("/:id/edit", async (req, res) => {
     res.redirect(`/posts/post/${id}`);
 })
 
+microPostRouter.delete("/:id/delete", async (req, res) => {
+    const { id } = req.params;
+    const microPost = await getMicroPostUseCase(id);
+
+    if (!microPost) {
+        res.status(404).send("MicroPost not found");
+        return;
+    }
+
+    if (!req.user || !(await userHasAccessToMicroPost(req.user.id, id))) {
+        res.status(401).send("Unauthorized to delete this micro post");
+        return;
+    }
+
+    await deleteMicroPostUseCase(req.user.id, id);
+
+    res.redirect("/posts");
+})
 
 
 export default microPostRouter;
