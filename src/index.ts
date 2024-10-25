@@ -7,6 +7,7 @@ import { User } from "@prisma/client";
 import { authenticateJWT } from "./utils/jwt-middleware";
 import cookieParser from "cookie-parser";
 import methodOverride from "method-override";
+import microPostRouter from "./routes/microPosts";
 
 dotenv.config();
 
@@ -40,6 +41,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
+app.use("/posts", microPostRouter);
 
 app.listen(port, () => {
   console.log(`Server is Fire at http://localhost:${port}`);

@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import { faker } from '@faker-js/faker';
 import { addUser } from '../src/use-cases/user';
 import { CreateUser } from '../src/types/users';
+import { createMicroPost } from '../src/data-access/microPosts';
 
 const prisma = new PrismaClient()
 
@@ -18,6 +19,23 @@ async function main() {
     for (const user of users) {
         await addUser(user);
     }
+
+    console.log("✅ Users seeded");
+
+    const allUsers = await prisma.user.findMany();
+
+    // Generate 100 random microPosts
+    const microPosts = Array.from({ length: 100 }).map(() => ({
+        title: faker.lorem.sentence(),
+        content: faker.lorem.paragraph(),
+        authorId: allUsers[Math.floor(Math.random() * allUsers.length)].id,    
+    }));
+
+    for (const microPost of microPosts) {
+      await createMicroPost(microPost);
+    }
+
+    console.log("✅ MicroPosts seeded");
 }
 
 main()
