@@ -1,5 +1,6 @@
 import express from "express";
-import { createMicroPostUseCase, getMicroPostsPaginated, getMicroPostsUseCase, getMicroPostUseCase } from "../use-cases/microPosts";
+import { createMicroPostUseCase, getMicroPostsPaginated, getMicroPostsUseCase, getMicroPostUseCase, updateMicroPostUseCase } from "../use-cases/microPosts";
+import { userHasAccessToMicroPost } from "../utils/microPosts";
 
 const microPostRouter = express.Router();
 
@@ -47,6 +48,44 @@ microPostRouter.post("/new", async (req, res) => {
 
     res.redirect(`/posts/post/${microPost.id}`);
 });
+
+microPostRouter.get("/:id/edit", async (req, res) => {
+    const { id } = req.params;
+    const microPost = await getMicroPostUseCase(id);
+
+    if (!microPost) {
+        res.status(404).send("MicroPost not found");
+        return;
+    }
+
+    if (!req.user || !(await userHasAccessToMicroPost(req.user.id, id))) {
+        res.status(401).send("Unauthorized to edit this micro post");
+        return;
+    }
+
+    res.render("microPosts/edit", { post: microPost });
+})
+
+microPostRouter.patch("/:id/edit", async (req, res) => {
+    const { id } = req.params;
+    const microPost = await getMicroPostUseCase(id);
+
+    if (!microPost) {
+        res.status(404).send("MicroPost not found");
+        return;
+    }
+
+    if (!req.user || !(await userHasAccessToMicroPost(req.user.id, id))) {
+        res.status(401).send("Unauthorized to edit this micro post");
+        return;
+    }
+
+    const { title, content } = req.body;
+
+    await updateMicroPostUseCase(req.user.id, id, { title, content });
+
+    res.redirect(`/posts/post/${id}`);
+})
 
 
 

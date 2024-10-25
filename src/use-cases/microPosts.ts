@@ -23,7 +23,7 @@ export async function createMicroPostUseCase(microPost: CreateMicropost){
     return await createMicroPost(microPost);
 }
 
-export async function updateMicroPostUseCase(userId: string, microPostId: string, microPost: CreateMicropost){
+export async function updateMicroPostUseCase(userId: string, microPostId: string, microPost: Partial<CreateMicropost>){
     if(!await userHasAccessToMicroPost(userId, microPostId)){
         throw new Error("404: User not authorized to update this microPost");
     }
