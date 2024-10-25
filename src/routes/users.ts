@@ -8,18 +8,39 @@ import {
 } from "../use-cases/user";
 import { CreateUser } from "../types/users";
 import { getUsersWithFilter } from "../utils/render";
+import { getUserFollowers, getUserFollowing, isUserFollowerOfUser } from "../data-access/users";
+import { toggleFollow } from "../use-cases/follows";
 
 const userRouter = express.Router();
 
 userRouter.get("/profile/:id", async (req, res) => {
   const user = await getUserPublicInfo(req.params.id);
+  
   if (!user) {
     res.status(404).send("User not found");
     return
   }
+  
+  const follows = await getUserFollowing(req.params.id);
+  const followed = await getUserFollowers(req.params.id);
+  const isCurrentUserAlreadyFollower = req.user ? await isUserFollowerOfUser(req.user.id, user.id) : false
 
-  res.render("users/profile", { user, currentUser: req.user });
+  res.render("users/profile", { user, followed, isCurrentUserAlreadyFollower, follows, currentUser: req.user });
 });
+
+userRouter.post("/profile/:id/toggleFollow", async (req, res) => {
+  const user = await getUserPublicInfo(req.params.id);
+  
+  if (!user || !req.user) {
+    res.status(404).send("Follower/Followed not found");
+    return
+  }
+  
+  await toggleFollow(req.user.id, user.id)
+
+  res.redirect(`/users/profile/${user.id}`)
+});
+
 
 userRouter.get("/profile/:id/edit", async (req, res) => {
   if (!req.user  || req.user.id !== req.params.id) {

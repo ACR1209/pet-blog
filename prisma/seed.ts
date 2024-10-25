@@ -3,6 +3,7 @@ import { faker } from '@faker-js/faker';
 import { addUser } from '../src/use-cases/user';
 import { CreateUser } from '../src/types/users';
 import { createMicroPost } from '../src/data-access/microPosts';
+import { makeUserFollowUser } from '../src/data-access/users';
 
 const prisma = new PrismaClient()
 
@@ -36,6 +37,24 @@ async function main() {
     }
 
     console.log("✅ MicroPosts seeded");
+
+    // Make each user be followed by 10 random users
+
+    for (const user of allUsers) {
+      const usersToFollow = allUsers
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 10)
+        .filter((u) => u.id !== user.id);
+
+      for (const userToFollow of usersToFollow) {
+        try {
+          await makeUserFollowUser(user.id, userToFollow.id);
+        }catch(e) {
+        }
+      }
+    }
+
+    console.log("✅ Follows seeded");
 }
 
 main()
