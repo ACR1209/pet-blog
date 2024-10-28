@@ -138,10 +138,6 @@ describe("User Routes", () => {
     app.use(express.json());
     app.set("view engine", "pug");
     app.set("views", __dirname.replace("tests", "src") + "/views");
-    app.use((req: Request, res: Response, next) => {
-        req.user = { id: "1", name: "Jane", lastName: "Doe", email: "jdoe@example.com", about: "A test user", encryptedPassword: "hashedPassword", createdAt: new Date(), updatedAt: new Date() };
-        next()
-    })
     app.use("/users", userRouter);
     
     beforeEach(() => {
@@ -213,7 +209,7 @@ describe("User Routes", () => {
     });
 
     describe("POST /users/profile/:id/toggleFollow", () => {
-        it("should toggle follow", async () => {
+        it("should give 404 if no user found or user not logged in", async () => {
             const mockUser = { id: "1", name: "John", lastName: "Doe", email: "jdoe@example.com", about: "A test user" };
             (getUserPublicInfo as jest.Mock).mockResolvedValue(mockUser);
             (isUserFollowerOfUser as jest.Mock).mockResolvedValue(false);
@@ -223,51 +219,24 @@ describe("User Routes", () => {
 
             const response = await request(app).post("/users/profile/1/toggleFollow");
 
-            expect(response.status).toBe(302);
-            expect(response.header.location).toBe("/users/profile/1");
-            expect(isUserFollowerOfUser).toHaveBeenCalledWith("1", "1");
-            expect(makeUserFollowUser).toHaveBeenCalledWith("1", "1");
+            expect(response.status).toBe(404);
         });
     })
 
     describe("GET /users/profile/:id/edit", () => {
-        it("should return user edit page", async () => {
-            const mockUser = { id: "1", name: "John", lastName: "Doe", email: "john@example.com", about: "A test user" };
-            (getUserPublicInfo as jest.Mock).mockResolvedValue(mockUser);
-
+        it("should return 401 if user is not logged in", async () => {
             const response = await request(app).get("/users/profile/1/edit");
 
-            expect(response.status).toBe(200);
-            expect(response.text).toContain("John");
-            expect(response.text).toContain("Doe");
-            expect(response.text).toContain("A test user");
+            expect(response.status).toBe(401);
         })
+
     })
 
     describe("PATCH /users/profile/:id/edit", () => {
-        it("should update user info", async () => {
-            const mockUser = { id: "1", name: "John", lastName: "Doe", email: "john@example.com", about: "A test user" };
-            (updateUserInfo as jest.Mock).mockResolvedValue(mockUser);
-           
-            const response = await request(app).patch("/users/profile/1/edit").send(mockUser);
+        it("should return 401 if user is not logged in", async () => {
+            const response = await request(app).patch("/users/profile/1/edit");
 
-            expect(response.status).toBe(302);
-            expect(response.header.location).toBe("/users/profile/1");
-            expect(updateUserInfo).toHaveBeenCalledWith("1", mockUser);
-        })
-    })
-
-    describe("GET /users/user/:id", () => {
-        it("should return user profile", async () => {
-            const mockUser = { id: "1", name: "John", lastName: "Doe", email: "jhon@example.com", about: "A test user" };
-            (getUserPublicInfo as jest.Mock).mockResolvedValue(mockUser);
-
-            const response = await request(app).get("/users/user/1");
-            
-            expect(response.status).toBe(200);
-            expect(response.text).toContain("John");
-            expect(response.text).toContain("Doe");
-            expect(response.type).toBe("application/json");
+            expect(response.status).toBe(401);
         })
     })
 

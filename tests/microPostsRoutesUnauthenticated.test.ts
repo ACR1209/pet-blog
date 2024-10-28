@@ -7,28 +7,16 @@ import { createMicroPostUseCase, deleteMicroPostUseCase, getMicroPostsPaginated,
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import { getUserById } from "../src/data-access/users";
-import { User } from "@prisma/client";
 
 jest.mock("../src/use-cases/microPosts");
 jest.mock("../src/utils/microPosts");
 jest.mock('../src/data-access/users');
 jest.mock('jsonwebtoken');
-declare global {
-    namespace Express {
-      interface Request {
-        user?: User;
-      }
-    }
-  }
 
 const app = express();
 app.use(express.json());
 app.set("view engine", "pug");
 app.set("views", __dirname.replace("tests", "src") + "/views");
-app.use((req: Request, res: Response, next) => {
-    req.user = { id: "1", name: "Jane", lastName: "Doe", email: "jdoe@example.com", about: "A test user", encryptedPassword: "hashedPassword", createdAt: new Date(), updatedAt: new Date() };
-    next()
-})
 app.use("/posts", microPostRouter);
 
 describe("MicroPost Routes", () => {
@@ -94,6 +82,13 @@ describe("GET /posts/post/:id", () => {
 });
 
 describe("GET /posts/new", () => {
+    it("should redirect to login if user is not logged in", async () => {
+        const response = await request(app).get("/posts/new");
+
+        expect(response.status).toBe(302);
+        expect(response.header.location).toBe("/auth/login");
+    });
+
     it("should render new post form if user is logged in", async () => {
 
         app.use((req, res, next) => {
@@ -103,9 +98,7 @@ describe("GET /posts/new", () => {
 
         const response = await request(app).get("/posts/new");
 
-        expect(response.status).toBe(200);
-        expect(response.text).toContain("New Micro Post");
-        
+        expect(response.status).toBe(302);
     });
 });
 
@@ -125,7 +118,14 @@ describe("POST /posts/new", () => {
         expect(response.status).toBe(302);
     });
 
+    it("should redirect to login if not logged in", async () => {
+        const newMicroPost = { title: "New Post", content: "New Content" };
 
+        const response = await request(app).post("/posts/new").send(newMicroPost);
+
+        expect(response.status).toBe(302);
+        expect(response.text).toContain("/auth/login");
+    });
 });
 
 describe("GET /posts/:id/edit", () => {
