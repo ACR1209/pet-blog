@@ -1,9 +1,25 @@
 extends ../layout.pug
 
+mixin listOfUsers(data, title)
+    if data.length > 0
+        div(class="w-1/2")
+            h2.text-xl.font-semibold.text-gray-700.my-4= title
+            .grid.grid-cols-2
+                each d in data
+                    a(href=`/users/profile/${d.id}`) #{d.name} #{d.lastName}
+    else
+        div(class="w-1/2")
+            h2.text-xl.font-semibold.text-gray-700.my-4= title
+            p= `No ${title} yet`
+ 
 block content
     div(class= "w-1/2 mx-auto py-8")
         div.flex.gap-4.items-center
             h1.text-2xl.font-bold.text-center User Profile
+
+            if user && currentUser && currentUser.id !== user.id 
+                form(action=`/users/profile/${user.id}/toggleFollow`, method="POST", class="inline")
+                    button(type="submit", class="")= isCurrentUserAlreadyFollower ? "Unfollow" : "Follow"
             if user && currentUser && user.id === currentUser.id
                 a(href=`/users/profile/${user.id}/edit`, class="text-blue-500 hover:underline") Edit Profile
         div.my-4
@@ -21,3 +37,7 @@ block content
             p= user.about
         else
             p No bio yet
+
+        div.my-4.flex.flex-row.justify-between
+            +listOfUsers(followed, 'Followers')
+            +listOfUsers(follows, 'Follows')

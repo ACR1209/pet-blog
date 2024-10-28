@@ -1,0 +1,7 @@
+mixin pagination(currentPage, totalPages, nextPage, prevPage)
+  div(class='flex justify-center items-center space-x-4 my-3')
+    a(href=prevPage ? `/posts?page=${prevPage}` : '#', class=`p-3 ${prevPage ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-500'} rounded-lg`, disabled=!prevPage) <
+
+    p #{currentPage} of #{totalPages}
+
+    a(href=nextPage ? `/posts?page=${nextPage}` : '#', class=`p-3 ${nextPage ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-500'} rounded-lg`, disabled=!nextPage) >

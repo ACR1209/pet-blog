@@ -1,0 +1,17 @@
+extends ../layout.pug
+include ../shared/pagination
+
+mixin post(post)
+    a(href=`/posts/post/${post.id}`, class="p-3 flex flex-col bg-white shadow-lg rounded-lg overflow-hidden")
+        h2.w-full.truncate.line-clamp-1.text-xl.font-semibold= post.title
+        p.line-clamp-2= post.content
+
+block content
+  div.flex.flex-row.items-center.justify-between.mb-5
+    h1.text-4xl.font-bold Micro Posts
+    a(href='/posts/new', class="bg-blue-500 px-5 py-1 rounded-lg text-white hover:bg-blue-700") New Post
+  div(class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4')
+    each post in pageData.data
+        +post(post)
+  +pagination(pageData.page, pageData.totalPages, pageData.nextPage, pageData.prevPage)  
+  

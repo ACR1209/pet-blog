@@ -1,0 +1,6 @@
+extends ../layout.pug
+include ./form.pug
+
+block content
+    h1.text-4xl.font-bold Edit #{post.title}
+    +postForm(`/posts/${post.id}/edit?_method=PATCH`, 'POST', post)

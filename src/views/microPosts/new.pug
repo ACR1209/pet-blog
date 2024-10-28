@@ -1,0 +1,6 @@
+extends ../layout.pug
+include ./form.pug
+
+block content
+    h1.text-4xl.font-bold New Micro Post
+    +postForm('/posts/new', 'POST', null)

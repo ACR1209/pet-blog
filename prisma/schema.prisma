@@ -22,4 +22,26 @@ model User {
   about             String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+  posts             MicroPost[]
+  followers Follows[] @relation("following")
+  following Follows[] @relation("follower")
+}
+
+model Follows {
+  follower    User @relation("follower", fields: [followerId], references: [id])
+  followerId  String
+  following   User @relation("following", fields: [followingId], references: [id])
+  followingId String
+
+  @@id([followerId, followingId])
+}
+
+model MicroPost {
+  id       String   @id @default(cuid())
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
 }
