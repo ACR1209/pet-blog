@@ -11,7 +11,7 @@ microPostRouter.get("/", async (req, res) => {
 
     const pageData = await getMicroPostsPaginated(pageToFetch, perPage);
 
-    res.render("microPosts/index", { pageData });
+    res.render("microPosts/index", { pageData, currentUser: req.user });
 });
 
 microPostRouter.get("/post/:id", async (req, res) => {
@@ -32,7 +32,7 @@ microPostRouter.get("/new", (req, res) => {
         return;
     }
 
-    res.render("microPosts/new");
+    res.render("microPosts/new", {currentUser: req.user});
 });
 
 microPostRouter.post("/new", async (req, res) => {
